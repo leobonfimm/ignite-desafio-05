@@ -37,6 +37,8 @@
     "prettier/prettier": "error",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "no-param-reassign": "off",
+    "no-return-assign": "off",
     "jsx-a11y/anchor-is-valid": [
       "error",
       {
