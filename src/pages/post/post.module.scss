@@ -49,3 +49,42 @@
     margin-left: 1.5625rem;
   }
 }
+
+.postContent {
+  margin-top: 4rem;
+
+  h2 {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-top: 3rem;
+  }
+}
+
+.postSection {
+  font-size: 1.125rem;
+  color: #d7d7d7;
+
+  p {
+    line-height: 1.5rem;
+  }
+
+  p + p {
+    margin-top: 1.5rem;
+  }
+
+  a {
+    color: #FF57B2;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  ul {
+    margin: 1rem 2rem;
+
+    li + li {
+      margin-top: 1rem;
+    }
+  }
+}

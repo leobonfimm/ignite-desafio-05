@@ -1,13 +1,17 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Prismic from '@prismicio/client';
+import Head from 'next/head';
 
-import { useMemo } from 'react';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
+import { RichText } from 'prismic-dom';
+import { parseISO, format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { getPrismicClient } from '../../services/prismic';
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
+import Header from '../../components/Header';
 
 interface Post {
   first_publication_date: string | null;
@@ -34,7 +38,7 @@ export default function Post({ post }: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
-    <h1>Carregando...</h1>;
+    return <h2>Carregando...</h2>;
   }
 
   const totalWords = post.data.content.reduce((total, contentItem) => {
@@ -46,38 +50,66 @@ export default function Post({ post }: PostProps): JSX.Element {
     return total;
   }, 0);
 
-  const averageReading = useMemo(() => {
-    return `${Math.ceil(totalWords / 200).toString()} min`;
-  }, [totalWords]);
+  const averageReading = `${Math.ceil(totalWords / 200).toString()} min`;
+
+  const formattedDate = format(
+    parseISO(post.first_publication_date),
+    'dd MMM yyyy',
+    {
+      locale: ptBR,
+    }
+  );
 
   return (
     <>
-      <img
-        className={styles.backgroundImg}
-        src="https://geomarvel.com/wp-content/uploads/2017/07/roman-synkevych-vXInUOv1n84-unsplash.jpg"
-        alt=""
-      />
+      <Head>
+        <title>{post.data.title} | Space Traveling</title>
+      </Head>
+
+      <Header />
+
+      {post.data.banner.url && (
+        <img
+          className={styles.backgroundImg}
+          src={post.data.banner.url}
+          alt={post.data.title}
+        />
+      )}
 
       <main className={commonStyles.container}>
-        <div className={styles.headerArticle}>
-          <h1>{post.data.title}</h1>
-          <div className={styles.readingInfo}>
-            <div>
-              <FiCalendar size={20} />
-              <time>{post.first_publication_date}</time>
-            </div>
+        <article>
+          <div className={styles.headerArticle}>
+            <h1>{post.data.title}</h1>
+            <div className={styles.readingInfo}>
+              <div>
+                <FiCalendar size={20} />
+                <time>{formattedDate}</time>
+              </div>
 
-            <div>
-              <FiUser size={20} />
-              <span>{post.data.author}</span>
-            </div>
+              <div>
+                <FiUser size={20} />
+                <span>{post.data.author}</span>
+              </div>
 
-            <div>
-              <FiClock size={20} />
-              <time>{averageReading}</time>
+              <div>
+                <FiClock size={20} />
+                <time>{averageReading}</time>
+              </div>
             </div>
           </div>
-        </div>
+
+          {post.data.content.map(({ heading, body }) => (
+            <div key={heading} className={styles.postContent}>
+              {heading && <h2>{heading}</h2>}
+
+              <div
+                className={styles.postSection}
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: RichText.asHtml(body) }}
+              />
+            </div>
+          ))}
+        </article>
       </main>
     </>
   );
@@ -92,15 +124,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
   );
 
-  const paths = posts.results.map(post => ({
-    params: {
-      slug: post.uid,
-    },
-  }));
+  const paths = posts.results.map(post => {
+    return {
+      params: {
+        slug: post.uid,
+      },
+    };
+  });
 
   return {
     paths,
-    fallback: 'blocking',
+    fallback: true,
   };
 };
 
@@ -114,22 +148,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       author: response.data.author,
       title: response.data.title,
       subtitle: response.data.subtitle,
-      content: response.data.content.map(item => ({
-        heading: item.heading,
-        body: [...item.body],
-      })),
-      banner: {
-        url: response.data.banner.url,
-      },
+      content: response.data.content,
+      banner: { url: response.data.banner.url },
     },
     uid: response.uid,
-    first_publication_date: new Date(
-      response.first_publication_date
-    ).toLocaleDateString('pt-Br', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    }),
+    first_publication_date: response.first_publication_date,
   };
 
   return {
