@@ -12,9 +12,11 @@ import { getPrismicClient } from '../../services/prismic';
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import Header from '../../components/Header';
+import { Comment } from '../../components/Comment';
 
 interface Post {
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -60,6 +62,14 @@ export default function Post({ post }: PostProps): JSX.Element {
     }
   );
 
+  const formattedUpdatedDate = format(
+    parseISO(post.last_publication_date),
+    "'* editado em 'dd MMM yyyy', às 'hh:mm",
+    {
+      locale: ptBR,
+    }
+  );
+
   return (
     <>
       <Head>
@@ -77,7 +87,7 @@ export default function Post({ post }: PostProps): JSX.Element {
       )}
 
       <main className={commonStyles.container}>
-        <article>
+        <article className={styles.container}>
           <div className={styles.headerArticle}>
             <h1>{post.data.title}</h1>
             <div className={styles.readingInfo}>
@@ -96,6 +106,8 @@ export default function Post({ post }: PostProps): JSX.Element {
                 <time>{averageReading}</time>
               </div>
             </div>
+
+            <p>{formattedUpdatedDate}</p>
           </div>
 
           {post.data.content.map(({ heading, body }) => (
@@ -110,6 +122,28 @@ export default function Post({ post }: PostProps): JSX.Element {
             </div>
           ))}
         </article>
+
+        <div className={styles.separator} />
+
+        <div className={styles.prevNextPost}>
+          <div>
+            <p>Como utilizar Hooks</p>
+            <a>Post anterior</a>
+          </div>
+
+          <div>
+            <p>Criando um app CRA do Zero</p>
+            <a>Post anterior</a>
+          </div>
+        </div>
+
+        <div className={styles.comment}>
+          <Comment />
+        </div>
+
+        <button type="button" className={commonStyles.buttonPreview}>
+          Sair do modo Preview
+        </button>
       </main>
     </>
   );
@@ -153,6 +187,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
     uid: response.uid,
     first_publication_date: response.first_publication_date,
+    last_publication_date: response.last_publication_date,
   };
 
   return {

@@ -39,6 +39,7 @@
     "react/prop-types": "off",
     "no-param-reassign": "off",
     "no-return-assign": "off",
+    "consistent-return": "off",
     "jsx-a11y/anchor-is-valid": [
       "error",
       {

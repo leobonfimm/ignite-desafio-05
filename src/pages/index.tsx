@@ -31,9 +31,14 @@ interface PostPagination {
 
 interface HomeProps {
   postsPagination: PostPagination;
+  preview: boolean;
 }
 
-export default function Home({ postsPagination }: HomeProps): JSX.Element {
+export default function Home({
+  postsPagination,
+  preview,
+}: HomeProps): JSX.Element {
+  console.log(postsPagination);
   const [posts, setPosts] = useState<Post[]>(postsPagination.results);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
 
@@ -75,16 +80,20 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
                 <p>{post.data.subtitle}</p>
 
                 <div>
-                  <FiCalendar size={20} />
-                  <time>
-                    {format(
-                      parseISO(post.first_publication_date),
-                      'dd MMM yyyy',
-                      {
-                        locale: ptBR,
-                      }
-                    )}
-                  </time>
+                  {post.first_publication_date && (
+                    <>
+                      <FiCalendar size={20} />
+                      <time>
+                        {format(
+                          parseISO(post.first_publication_date),
+                          'dd MMM yyyy',
+                          {
+                            locale: ptBR,
+                          }
+                        )}
+                      </time>
+                    </>
+                  )}
 
                   <FiUser size={20} />
                   <p>{post.data.author}</p>
@@ -92,40 +101,50 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
               </a>
             </Link>
           ))}
+
+          <div className={styles.containerHandleActions}>
+            {nextPage && (
+              <button type="button" onClick={handlePagination}>
+                Carregar mais posts
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className={styles.containerHandleActions}>
-          {nextPage && (
-            <button type="button" onClick={handlePagination}>
-              Carregar mais posts
-            </button>
-          )}
-        </div>
+        {preview && (
+          <Link href="/api/exit-preview">
+            <a className={commonStyles.buttonPreview}>Sair do modo Preview</a>
+          </Link>
+        )}
       </main>
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async ({
+  preview = false,
+  previewData,
+}) => {
   const prismic = getPrismicClient();
 
   const postsResponse = await prismic.query(
     [Prismic.predicates.at('document.type', 'post')],
     {
       fetch: ['post.title', 'post.subtitle', 'post.author'],
-      pageSize: 1,
+      pageSize: 20,
+      ref: previewData?.ref ?? null,
     }
   );
 
   const results = postsResponse.results.map(post => {
     return {
       uid: post.uid,
+      first_publication_date: post.first_publication_date,
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,
         author: post.data.author,
       },
-      first_publication_date: post.first_publication_date,
     };
   });
 
@@ -135,6 +154,7 @@ export const getStaticProps: GetStaticProps = async () => {
         next_page: postsResponse.next_page,
         results,
       },
+      preview,
     },
   };
 };

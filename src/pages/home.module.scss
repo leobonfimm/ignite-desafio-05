@@ -1,8 +1,14 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
 
 .post {
   display: flex;
   flex-direction: column;
   transition: filter 0.2s;
+  width: 43.75rem;
 
   & + & {
     margin-top: 3.125rem;
@@ -47,7 +53,7 @@
 
 
 .containerHandleActions {
-  margin-top: 2rem;
+  margin-top: 4.104375rem;
 
   button {
     font-weight: 600;
