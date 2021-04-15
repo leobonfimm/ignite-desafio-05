@@ -5,6 +5,7 @@ import Head from 'next/head';
 
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { RichText } from 'prismic-dom';
+import Link from 'next/link';
 import { parseISO, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { getPrismicClient } from '../../services/prismic';
@@ -32,11 +33,23 @@ interface Post {
   };
 }
 
+interface PostNeighborhood {
+  title: string;
+  uid: string;
+}
 interface PostProps {
   post: Post;
+  preview: boolean;
+  prevPost: PostNeighborhood;
+  nextPost: PostNeighborhood;
 }
 
-export default function Post({ post }: PostProps): JSX.Element {
+export default function Post({
+  post,
+  preview,
+  nextPost,
+  prevPost,
+}: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -127,13 +140,25 @@ export default function Post({ post }: PostProps): JSX.Element {
 
         <div className={styles.prevNextPost}>
           <div>
-            <p>Como utilizar Hooks</p>
-            <a>Post anterior</a>
+            {prevPost && (
+              <>
+                <p>{prevPost.title}</p>
+                <Link href={`/post/${prevPost.uid}`}>
+                  <a>Post anterior</a>
+                </Link>
+              </>
+            )}
           </div>
 
           <div>
-            <p>Criando um app CRA do Zero</p>
-            <a>Post anterior</a>
+            {nextPost && (
+              <>
+                <p>{nextPost.title}</p>
+                <Link href={`/post/${nextPost.uid}`}>
+                  <a>Próximo post</a>
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -141,9 +166,11 @@ export default function Post({ post }: PostProps): JSX.Element {
           <Comment />
         </div>
 
-        <button type="button" className={commonStyles.buttonPreview}>
-          Sair do modo Preview
-        </button>
+        {preview && (
+          <Link href="/api/exit-preview">
+            <a className={commonStyles.buttonPreview}>Sair do modo Preview</a>
+          </Link>
+        )}
       </main>
     </>
   );
@@ -154,7 +181,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await prismic.query(
     [Prismic.predicates.at('document.type', 'post')],
     {
-      fetch: ['post.title', 'post.subtitle', 'post.author'],
+      pageSize: 3,
     }
   );
 
@@ -172,10 +199,31 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<PostProps> = async ({
+  params,
+  preview = false,
+}) => {
   const prismic = getPrismicClient();
   const { slug } = params;
   const response = await prismic.getByUID('post', String(slug), {});
+
+  const postPrevious = await prismic.query(
+    Prismic.Predicates.at('document.type', 'post'),
+    {
+      pageSize: 1,
+      after: slug,
+      orderings: '[document.first_publication_date desc]',
+    }
+  );
+
+  const postNext = await prismic.query(
+    Prismic.Predicates.at('document.type', 'post'),
+    {
+      pageSize: 1,
+      after: slug,
+      orderings: '[document.first_publication_date]',
+    }
+  );
 
   const post = {
     data: {
@@ -193,6 +241,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post,
+      preview,
+      prevPost:
+        slug === postPrevious.results[0].uid
+          ? null
+          : {
+              title: postPrevious.results[0]?.data?.title,
+              uid: postPrevious.results[0]?.uid,
+            },
+      nextPost:
+        slug === postNext.results[0].uid
+          ? null
+          : {
+              title: postNext.results[0]?.data?.title,
+              uid: postNext.results[0]?.uid,
+            },
     },
   };
 };

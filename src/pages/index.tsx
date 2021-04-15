@@ -38,7 +38,6 @@ export default function Home({
   postsPagination,
   preview,
 }: HomeProps): JSX.Element {
-  console.log(postsPagination);
   const [posts, setPosts] = useState<Post[]>(postsPagination.results);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
 
@@ -80,20 +79,16 @@ export default function Home({
                 <p>{post.data.subtitle}</p>
 
                 <div>
-                  {post.first_publication_date && (
-                    <>
-                      <FiCalendar size={20} />
-                      <time>
-                        {format(
-                          parseISO(post.first_publication_date),
-                          'dd MMM yyyy',
-                          {
-                            locale: ptBR,
-                          }
-                        )}
-                      </time>
-                    </>
-                  )}
+                  <FiCalendar size={20} />
+                  <time>
+                    {format(
+                      parseISO(post.first_publication_date),
+                      'dd MMM yyyy',
+                      {
+                        locale: ptBR,
+                      }
+                    )}
+                  </time>
 
                   <FiUser size={20} />
                   <p>{post.data.author}</p>

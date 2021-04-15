@@ -7,8 +7,15 @@
 .buttonPreview {
   width: 43.75rem;
   height: 3.625rem;
-  border: none;
-  margin-bottom: 6.725rem;
-  margin-top: 5.5rem;
+  background: #F8F8F8;
   border-radius: 4px;
+  margin-top: 5.5rem;
+  margin-bottom: 6.625rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1A1D23;
 }
