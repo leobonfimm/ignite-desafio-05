@@ -44,6 +44,6 @@ Quinto desafio proposto dentro do bootcamp da Rocketseat onde um blog tinha que 
 - Instale as dependências com ```yarn```
 - Inicie o servidor com ```yarn dev```
 
-É preciso ter uma conta e configurado um repositório dentro do <strong><a href="https://prismic.io/">Prismic</a></strong>.
+É preciso ter uma conta e configurada e um repositório dentro do <strong><a href="https://prismic.io/">Prismic</a></strong>.
 
 Agora é só acessar ```localhost:3000``` no navegador.
