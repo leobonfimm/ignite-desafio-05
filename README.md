@@ -10,13 +10,19 @@
 </p>
 
 <p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://github.com/leobonfimm/ignite-desafio-05/blob/master/.github/capa.png">
-    <img alt="Space Traveling" src="https://github.com/leobonfimm/ignite-desafio-05/blob/master/.github/capa.png" width="100%" style="max-width:100%;">
+  <a target="_blank" rel="noopener noreferrer" href=".github/capa.png">
+    <img alt="Space Traveling" src=".github/capa.png" width="100%" style="max-width:100%;">
    </a>
 </p>
 
 <a id="demonstracao"></a>
 ## 💻 Demonstração
+
+<p align="center">
+  <a target="_blank" rel="noopener noreferrer" href=".github/demo.png">
+    <img alt="Space Traveling" src=".github/demo.gif" width="100%" style="max-width:100%;">
+   </a>
+</p>
 
 <a id="tecnologias"></a>
 ## ✨ Tecnologias
