@@ -211,8 +211,8 @@ export const getStaticProps: GetStaticProps<PostProps> = async ({
     Prismic.Predicates.at('document.type', 'post'),
     {
       pageSize: 1,
-      after: slug,
-      orderings: '[document.first_publication_date desc]',
+      after: response.uid,
+      orderings: '[document.first_publication_date]',
     }
   );
 
@@ -220,8 +220,8 @@ export const getStaticProps: GetStaticProps<PostProps> = async ({
     Prismic.Predicates.at('document.type', 'post'),
     {
       pageSize: 1,
-      after: slug,
-      orderings: '[document.first_publication_date]',
+      after: response.uid,
+      orderings: '[document.first_publication_date desc]',
     }
   );
 

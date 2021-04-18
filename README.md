@@ -19,6 +19,10 @@
 - <a href="https://utteranc.es/">Utterances</a>
 </ul>
 
+<p align="center">
+  <!-- <img alt="Space Traveling" src="./"> -->
+</p>
+
 <a id="projeto"></a>
 ## 🛠️ Projeto
 Quinto desafio proposto dentro do bootcamp da Rocketseat onde um blog tinha que ser desenvolvido do zero com Prismic CMS a aprtir de um layout do Figma.
