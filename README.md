@@ -1,6 +1,6 @@
 <h1 align="center">Space Traveling</h1>
 <p align="center">
-  <a href="#como-executar">Demonstração</a>
+  <a href="#demonstracao">Demonstração</a>
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#tecnologias">Tecnologias</a>
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -8,6 +8,15 @@
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#como-executar">Como executar</a>
 </p>
+
+<p align="center">
+  <a target="_blank" rel="noopener noreferrer" href="https://github.com/leobonfimm/ignite-desafio-05/blob/master/.github/capa.png">
+    <img alt="Space Traveling" src="https://github.com/leobonfimm/ignite-desafio-05/blob/master/.github/capa.png" width="100%" style="max-width:100%;">
+   </a>
+</p>
+
+<a id="demonstracao"></a>
+## 💻 Demonstração
 
 <a id="tecnologias"></a>
 ## ✨ Tecnologias
@@ -18,10 +27,6 @@
 - <a href="https://prismic.io/">Prismic</a>
 - <a href="https://utteranc.es/">Utterances</a>
 </ul>
-
-<p align="center">
-  <!-- <img alt="Space Traveling" src="./"> -->
-</p>
 
 <a id="projeto"></a>
 ## 🛠️ Projeto
