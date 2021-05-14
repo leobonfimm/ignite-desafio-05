@@ -36,7 +36,7 @@
 
 <a id="projeto"></a>
 ## 🛠️ Projeto
-Quinto desafio proposto dentro do bootcamp da Rocketseat onde um blog tinha que ser desenvolvido do zero com Prismic CMS a aprtir de um layout do Figma.
+Quinto desafio proposto dentro do bootcamp da Rocketseat onde um blog tinha que ser desenvolvido do zero com Prismic CMS a partir de um layout do Figma.
 
 <a id="como-executar"></a>
 ## 👨‍💻 Como executar
